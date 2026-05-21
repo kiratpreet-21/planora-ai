@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile &amp; Stats – Planora AI Study Planner</title>
+  <meta name="description" content="View your study stats, progress, and achievements on Planora." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/features.css" />
+  <link rel="stylesheet" href="css/depth.css" />
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+</head>
+
+<body>
+  <nav class="navbar" id="navbar"></nav>
+
+  <main class="main-content">
+    <div class="page-header fade-in">
+      <div>
+        <h1 class="page-title">Profile &amp; Stats <i data-lucide="bar-chart-2" class="icon-inline"></i></h1>
+        <p class="page-subtitle">Your study journey at a glance</p>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="showResetModal()">Reset All Data</button>
+    </div>
+
+    <div class="profile-layout" style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+      <!-- ── LEFT: User card ── -->
+      <div class="profile-left">
+        <div class="card profile-hero fade-in">
+          <div class="profile-av" id="profileAv"
+            style="width: 80px; height: 80px; background: var(--g-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; color: #fff; margin: 0 auto 1rem;">
+            ?</div>
+          <div class="profile-name" id="profileName" style="font-size: 1.5rem; font-weight: 900; text-align: center;">
+            Scholar</div>
+          <div class="profile-tagline"
+            style="text-align: center; color: var(--muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Powered by
+            Planora AI <i data-lucide="sparkles" class="icon-inline"></i></div>
+
+          <div class="profile-stats-mini"
+            style="display: flex; justify-content: space-around; border-top: 1px solid var(--glass-b); padding-top: 1.5rem;">
+            <div style="text-align:center">
+              <div class="ps-mini-val" id="psStreak"
+                style="font-size: 1.25rem; font-weight: 800; color:var(--accent-pk)"><i data-lucide="flame" class="icon-inline"></i> 0</div>
+              <div class="ps-mini-label" style="font-size: 0.7rem; color: var(--muted);">Streak</div>
+            </div>
+            <div style="text-align:center">
+              <div class="ps-mini-val" id="psTotalTime"
+                style="font-size: 1.25rem; font-weight: 800; color:var(--accent-p)">0h</div>
+              <div class="ps-mini-label" style="font-size: 0.7rem; color: var(--muted);">Studied</div>
+            </div>
+            <div style="text-align:center">
+              <div class="ps-mini-val" id="psLevel" style="font-size: 1.25rem; font-weight: 800; color:var(--accent-c)">
+                Lvl 1</div>
+              <div class="ps-mini-label" style="font-size: 0.7rem; color: var(--muted);">Level</div>
+            </div>
+          </div>
+          <!-- XP Progress Bar -->
+          <div style="margin-top: 1.2rem; padding: 0 1rem;">
+            <div
+              style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); margin-bottom: 0.3rem; font-weight: 700;">
+              <span>XP PROGRESS</span>
+              <span id="psXPText">0 / 500 XP</span>
+            </div>
+            <div style="height: 4px; background: var(--glass-b); border-radius: 2px; overflow: hidden;">
+              <div id="psXPBar"
+                style="height: 100%; background: var(--g-pink); width: 0%; transition: width 0.5s ease;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── RIGHT: Stats Details ── -->
+      <div class="profile-right">
+        <div class="card fade-in" style="margin-bottom:1.5rem">
+          <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.5rem;">Overall Progress</h3>
+
+          <div style="display: flex; align-items: center; gap: 2rem;">
+            <div class="progress-circle" id="profileProgressCircle" data-pct="0%"
+              style="--p: 0; width: 140px; height: 140px;"></div>
+
+            <div style="flex: 1;">
+              <div style="margin-bottom: 1rem;">
+                <div
+                  style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem;">
+                  <span>Task Completion</span>
+                  <span id="completionValue">0/0</span>
+                </div>
+                <!-- Simple progress bar fallback or addition -->
+                <div style="height: 8px; background: var(--glass-b); border-radius: 4px; overflow: hidden;">
+                  <div id="completionBar" style="height: 100%; background: var(--g-main); width: 0%;"></div>
+                </div>
+              </div>
+
+              <div class="stats-grid-mini" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="card" style="padding: 1rem; background: var(--glass-b); border: none;">
+                  <div style="font-size: 0.7rem; color: var(--muted);">Total Subjects</div>
+                  <div style="font-size: 1.25rem; font-weight: 800;" id="totalSubCount">0</div>
+                </div>
+                <div class="card" style="padding: 1rem; background: var(--glass-b); border: none;">
+                  <div style="font-size: 0.7rem; color: var(--muted);">Completed Today</div>
+                  <div style="font-size: 1.25rem; font-weight: 800;" id="doneTodayCount">0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card fade-in" style="--delay:.1s; margin-bottom:1.5rem">
+          <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.5rem;">Priority Analysis</h3>
+          <div id="priorityBars">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ACHIEVEMENTS SECTION ══ -->
+    <div class="card fade-in" style="--delay:.15s; margin-top:2rem">
+      <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.5rem;"><i data-lucide="trophy" class="icon-inline"></i> Achievements</h3>
+      <div id="profileAchievements">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- ══ WEEKLY STUDY GRAPH ══ -->
+    <div class="card fade-in" style="--delay:.2s; margin-top:1.5rem">
+      <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.5rem;"><i data-lucide="trending-up" class="icon-inline"></i> Weekly Study Hours</h3>
+      <div id="profileWeeklyGraph" style="height: 250px;">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- ══ SUBJECT PERFORMANCE ══ -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+      <div class="card fade-in" style="--delay:.25s">
+        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.5rem;"><i data-lucide="award" class="icon-inline"></i> Strongest Subject</h3>
+        <div id="strongestSubject">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <div class="card fade-in" style="--delay:.3s">
+        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.5rem;"><i data-lucide="book-open" class="icon-inline"></i> Needs More Focus</h3>
+        <div id="weakestSubject">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STUDY HEATMAP ══ -->
+    <div class="card fade-in" style="--delay:.35s; margin-top:1.5rem">
+      <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.5rem;"><i data-lucide="flame" class="icon-inline"></i> 30-Day Study Activity</h3>
+      <div id="profileHeatmap">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Reset confirm modal -->
+  <div id="resetModal" class="timer-overlay" style="display:none;">
+    <div class="timer-card">
+      <div style="font-size:2.5rem;margin-bottom:.75rem;"><i data-lucide="alert-triangle" class="icon-inline" style="width:1.5em;height:1.5em;"></i></div>
+      <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:.5rem;">Reset All Data?</h3>
+      <p style="font-size:.875rem;color:var(--text2);margin-bottom:1.5rem;">This will permanently delete all your
+        subjects and study history. This cannot be undone.</p>
+      <div style="display:flex;gap:.75rem;justify-content:center;">
+        <button class="btn btn-outline" onclick="closeResetModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="performReset()">Yes, Reset Everything</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/profile.js"></script>
+  <script src="js/depth.js"></script>
+</body>
+
+</html>

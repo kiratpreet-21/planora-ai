@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Task – Planora AI Study Planner</title>
+  <meta name="description" content="Add a new study subject to your Planora planner." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/features.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/depth.css" />
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+</head>
+
+<body>
+  <nav class="navbar" id="navbar"></nav>
+
+  <main class="main-content">
+    <div class="page-header fade-in">
+      <div>
+        <h1 class="page-title">Add Subject <i data-lucide="plus" class="icon-inline"></i></h1>
+        <p class="page-subtitle">Add a subject and let Planora calculate the priority for you</p>
+      </div>
+      <a href="index.html" class="btn btn-outline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        Back to Dashboard
+      </a>
+    </div>
+
+    <div class="add-layout">
+      <!-- ── FORM ── -->
+      <div class="card add-form-card fade-in">
+        <div class="form-card-icon"><i data-lucide="book-open"></i></div>
+        <h2 class="form-card-title">New Subject</h2>
+
+        <form id="addForm" novalidate>
+          <!-- Subject name -->
+          <div class="form-group">
+            <label class="form-label" for="subjectName">Subject Name *</label>
+            <div class="input-wrap">
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              </svg>
+              <input type="text" id="subjectName" class="form-input" placeholder="e.g. Calculus, Physics…" required
+                maxlength="60" oninput="livePreview()" />
+            </div>
+            <div class="form-error" id="subjectErr"></div>
+          </div>
+
+          <!-- Difficulty -->
+          <div class="form-group">
+            <label class="form-label" for="difficulty">
+              Difficulty Level: <span id="diffVal" class="text-purple">3</span> / 5
+            </label>
+            <input type="range" id="difficulty" class="form-slider" min="1" max="5" step="1" value="3"
+              oninput="updateDiff(this.value)" />
+            <div class="diff-display" id="diffPips"></div>
+            <div class="form-error" id="diffErr"></div>
+          </div><!-- Amount of Work -->
+          <div class="form-group">
+            <label class="form-label" for="workAmount">
+              Total Work (in hours)
+            </label>
+            <div class="input-wrap">
+              <input type="number" id="workAmount" class="form-input no-icon" placeholder="e.g. 10 hours" min="1"
+                oninput="livePreview()" />
+            </div>
+            <div class="form-error" id="workErr"></div>
+          </div>
+
+
+          <!-- Exam date -->
+          <div class="form-group">
+            <label class="form-label" for="examDate">Exam Date *</label>
+            <div class="input-wrap">
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+              <input type="date" id="examDate" class="form-input" required oninput="livePreview()" />
+            </div>
+            <div class="form-error" id="dateErr"></div>
+          </div>
+
+          <!-- Color tag -->
+          <div class="form-group">
+            <label class="form-label">Color Tag</label>
+            <div class="color-picker" id="colorPicker"></div>
+            <input type="hidden" id="selectedColor" value="#a78bfa" />
+          </div>
+
+          <div style="display:flex;gap:.75rem;margin-top:.5rem;">
+            <button type="submit" class="btn btn-primary" style="flex:1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="16" />
+                <line x1="8" y1="12" x2="16" y2="12" />
+              </svg>
+              Add Subject
+            </button>
+            <a href="index.html" class="btn btn-outline">Cancel</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- ── LIVE PREVIEW ── -->
+      <div class="add-preview-panel fade-in" style="--delay:.1s">
+        <div class="card">
+          <h3 class="form-card-title" style="margin-bottom:1rem;text-align:left">Live Preview</h3>
+          <div class="preview-card-inner" id="previewCard">
+            <div class="preview-title">Subject</div>
+            <div class="preview-subject" id="prevSubject">— enter a name —</div>
+            <div id="prevPriority" class="preview-priority-big pl">—</div>
+            <div class="preview-meta-row" id="prevMeta"></div>
+            <div id="prevBadge"></div>
+          </div>
+        </div>
+
+        <!-- Tip card -->
+        <div class="card" style="margin-top:1rem;padding:1rem 1.25rem;">
+          <p style="font-size:.8rem;font-weight:700;color:var(--purple);margin-bottom:.4rem;"><i data-lucide="lightbulb" class="icon-inline"></i> Priority Formula</p>
+          <p style="font-size:.82rem;color:var(--text2);line-height:1.6;">
+            Higher score = study this first! Anything <strong style="color:var(--c-high)">≥ 0.7</strong> is <strong
+              style="color:var(--c-high)">High</strong>, <strong style="color:var(--c-medium)">≥ 0.3</strong> is <strong
+              style="color:var(--c-medium)">Medium</strong>, else <strong style="color:var(--c-low)">Low</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/add.js"></script>
+  <script src="js/depth.js"></script>
+</body>
+
+</html>

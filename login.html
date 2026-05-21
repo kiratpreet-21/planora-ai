@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – Planora AI Study Planner</title>
+  <meta name="description" content="Login to Planora, your AI-powered study planner." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/depth.css" />
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <button class="auth-theme-btn" id="themeBtn" onclick="toggleThemePage()" aria-label="Toggle theme"><i data-lucide="sun" class="icon-inline"></i></button>
+
+  <div class="auth-page">
+    <!-- Background orbs -->
+    <div class="auth-orb auth-orb-1"></div>
+    <div class="auth-orb auth-orb-2"></div>
+    <div class="auth-orb auth-orb-3"></div>
+
+    <div class="auth-card">
+      <!-- Brand -->
+      <div class="auth-brand">
+        <div class="auth-logo-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <span class="auth-brand-name">Planora</span>
+      </div>
+      <p class="auth-tagline">Your AI-powered study companion <i data-lucide="sparkles" class="icon-inline"></i></p>
+
+      <h2 class="auth-title">Welcome back <i data-lucide="smile" class="icon-inline"></i></h2>
+
+      <form id="loginForm" novalidate>
+        <!-- Username -->
+        <div class="form-group">
+          <label class="form-label" for="username">Display Name</label>
+          <div class="input-wrap">
+            <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input type="text" id="username" class="form-input" placeholder="Your name" autocomplete="username" required />
+          </div>
+          <div class="form-error" id="usernameErr"></div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="input-wrap">
+            <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="password" class="form-input" placeholder="Enter password" autocomplete="current-password" required />
+            <button type="button" class="eye-btn" id="eyeBtn" onclick="togglePw('password','eyeBtn')" aria-label="Show password">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="form-error" id="passwordErr"></div>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: -0.5rem; margin-bottom: 1rem;">
+          <input type="checkbox" id="rememberMe" checked style="accent-color: var(--purple); width: 16px; height: 16px; cursor: pointer;">
+          <label for="rememberMe" style="font-size: 0.85rem; color: var(--text2); cursor: pointer;">Remember my login information</label>
+        </div>
+
+        <div class="form-error" id="formErr"></div>
+
+        <button type="submit" class="btn btn-primary btn-full auth-submit" id="loginBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Login to Planora
+        </button>
+      </form>
+
+      <p class="auth-link">New here? <a href="signup.html">Create an account →</a></p>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    // Redirect if already logged in
+    requireGuest();
+    initTheme();
+    applyThemeIcon();
+
+    function togglePw(inputId, btnId) {
+      const inp = document.getElementById(inputId);
+      const btn = document.getElementById(btnId);
+      inp.type = inp.type === 'password' ? 'text' : 'password';
+      btn.style.opacity = inp.type === 'text' ? '0.5' : '1';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedInfo = localStorage.getItem('planora_remember_info');
+      if (savedInfo) {
+        try {
+          const info = JSON.parse(savedInfo);
+          document.getElementById('username').value = info.name || '';
+          document.getElementById('password').value = info.pw || '';
+          document.getElementById('rememberMe').checked = true;
+        } catch(e) {}
+      }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', e => {
+      e.preventDefault();
+      clearErrors();
+
+      const name = document.getElementById('username').value.trim();
+      const pw   = document.getElementById('password').value;
+
+      let valid = true;
+      if (!name) { showFieldErr('usernameErr', 'Name is required.'); valid = false; }
+      if (!pw)   { showFieldErr('passwordErr', 'Password is required.'); valid = false; }
+      if (!valid) return;
+
+      const accounts = getAccounts();
+      if (Object.keys(accounts).length === 0) {
+        showFieldErr('formErr', 'No accounts found on this device. Please sign up!');
+        return;
+      }
+
+      if (!verifyCredentials(name, pw)) {
+        showFieldErr('formErr', 'Incorrect name or password.');
+        return;
+      }
+
+      // Success - set session
+      setAuth(name);
+
+      const remember = document.getElementById('rememberMe').checked;
+      if (remember) {
+        localStorage.setItem('planora_remember_info', JSON.stringify({ name, pw }));
+      } else {
+        localStorage.removeItem('planora_remember_info');
+      }
+
+      showToast('👋 Welcome back, ' + name + '!', 'success');
+      setTimeout(() => window.location.href = 'index.html', 600);
+    });
+
+    function clearErrors() {
+      ['usernameErr','passwordErr','formErr'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '';
+      });
+    }
+    function showFieldErr(id, msg) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = msg;
+    }
+  </script>
+</body>
+</html>
