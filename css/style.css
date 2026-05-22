@@ -312,6 +312,7 @@ ul {
   align-items: center;
   justify-content: center;
   transition: all var(--fast);
+  color: var(--text);
 }
 
 .theme-toggle-btn:hover {
@@ -3010,6 +3011,7 @@ ul {
   flex-direction: column;
   z-index: 1500;
   animation: chatIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
 }
 
 @keyframes chatIn {
@@ -3983,3 +3985,247 @@ ul {
   width: 1.5em;
   height: 1.5em;
 }
+
+/* ============================================================
+   FOCUS MUSIC WIDGET
+   ============================================================ */
+
+.music-widget {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  width: 340px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--cyan) 15%, transparent), color-mix(in srgb, var(--purple) 15%, transparent));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent);
+  border-radius: var(--r-lg);
+  box-shadow: 0 10px 40px color-mix(in srgb, var(--cyan) 20%, transparent);
+  display: flex;
+  flex-direction: column;
+  z-index: 1500;
+  animation: chatIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+.music-widget.minimized {
+  display: none;
+}
+
+.music-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--bg) 40%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--cyan) 20%, transparent);
+  cursor: pointer;
+  user-select: none;
+}
+
+.music-status {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.music-icon {
+  font-size: 1.5rem;
+  color: var(--cyan);
+  display: flex;
+  align-items: center;
+}
+
+.music-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text1);
+}
+
+.music-subtitle {
+  font-size: 0.75rem;
+  color: var(--cyan);
+  font-weight: 600;
+}
+
+.music-header-actions {
+  display: flex;
+  align-items: center;
+}
+
+.music-action-btn {
+  background: none;
+  border: none;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all var(--fast);
+  display: flex;
+  align-items: center;
+}
+
+.music-action-btn:hover {
+  color: var(--cyan);
+  transform: rotate(180deg);
+}
+
+.music-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.music-select-wrapper {
+  width: 100%;
+}
+
+.music-select {
+  width: 100%;
+  background: var(--bg1) url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2322d3ee%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") no-repeat right 0.8rem center;
+  background-size: 16px 16px;
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid var(--glass-b);
+  color: var(--text1);
+  padding: 0.7rem 2.5rem 0.7rem 1rem;
+  border-radius: var(--r-md);
+  font-size: 0.85rem;
+  font-weight: 500;
+  outline: none;
+  transition: all var(--fast);
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.music-select:hover {
+  border-color: color-mix(in srgb, var(--cyan) 40%, transparent);
+  background-color: var(--card-bg);
+}
+
+.music-select:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cyan) 15%, transparent);
+}
+
+.music-select option {
+  background-color: var(--bg1);
+  color: var(--text1);
+  font-weight: 500;
+}
+
+.music-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.music-control-btn {
+  width: 44px;
+  height: 44px;
+  background: var(--g-neon);
+  border: none;
+  border-radius: 50%;
+  color: #1e293b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--fast);
+  box-shadow: var(--glow-cyan);
+  flex-shrink: 0;
+}
+
+.music-control-btn:hover {
+  transform: scale(1.05);
+}
+
+.music-control-btn:active {
+  transform: scale(0.95);
+}
+
+.music-volume-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.volume-icon {
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+}
+
+.music-volume-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--glass-b);
+  height: 6px;
+  border-radius: 3px;
+  outline: none;
+}
+
+.music-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--cyan);
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+/* Music FAB */
+.music-fab {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--g-neon);
+  border: none;
+  box-shadow: var(--sh-md), var(--glow-cyan);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1400;
+  transition: all var(--fast);
+  color: #1e293b;
+}
+
+[data-theme="light"] .music-fab,
+[data-theme="light"] .music-control-btn {
+  color: #ffffff;
+}
+
+.music-fab:hover {
+  transform: scale(1.1);
+}
+
+.music-fab:active {
+  transform: scale(0.95);
+}
+
+.music-fab-icon {
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .music-widget {
+    left: 1rem;
+    bottom: 5rem;
+    width: calc(100vw - 2rem);
+    max-width: 320px;
+  }
+  .music-fab {
+    left: 1rem;
+    bottom: 5rem;
+  }
+}
+

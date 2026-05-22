@@ -949,6 +949,13 @@ function sendChatMessage(userMessage) {
     // Handle special actions
     if (response.action === 'openPlanner') {
       openAIPlanner();
+    } else if (response.action === 'startTimer') {
+      const tasks = (typeof getTasks === 'function') ? getTasks().filter(t => !t.completed) : [];
+      if (tasks.length > 0 && typeof startStudyTimer === 'function') {
+        startStudyTimer(tasks[0].id, tasks[0].subject, tasks[0].recommendedMinutes || 25);
+      } else if (typeof startStudyTimer === 'function') {
+        startStudyTimer('custom', 'Focus Session', 25);
+      }
     }
 
     appendAIMessage(container, response);
@@ -977,11 +984,57 @@ function appendAIMessage(container, response) {
   const el = document.createElement('div');
   el.className = 'ai-message';
   el.innerHTML = `
-    <div class="ai-message-content">${response.text}</div>
+    <div class="ai-message-content"></div>
     <div class="ai-message-time">${getTimeLabel()}</div>`;
   container.appendChild(el);
-  if (typeof refreshIcons === 'function') refreshIcons();
-  container.scrollTop = container.scrollHeight;
+  
+  const contentEl = el.querySelector('.ai-message-content');
+  let i = 0;
+  let htmlString = response.text;
+  let currentHtml = "";
+
+  function typeNext() {
+    if (i >= htmlString.length) {
+      if (typeof refreshIcons === 'function') refreshIcons();
+      container.scrollTop = container.scrollHeight;
+      return;
+    }
+
+    let char = htmlString.charAt(i);
+    let delay = 10;
+
+    if (char === '<') {
+      let tagEnd = htmlString.indexOf('>', i);
+      if (tagEnd !== -1) {
+        currentHtml += htmlString.substring(i, tagEnd + 1);
+        i = tagEnd + 1;
+        contentEl.innerHTML = currentHtml;
+        typeNext();
+        return;
+      }
+    } else if (char === '&') {
+      let entityEnd = htmlString.indexOf(';', i);
+      if (entityEnd !== -1 && entityEnd - i < 10) {
+        currentHtml += htmlString.substring(i, entityEnd + 1);
+        i = entityEnd + 1;
+        contentEl.innerHTML = currentHtml;
+        setTimeout(typeNext, delay);
+        return;
+      }
+    }
+
+    currentHtml += char;
+    i++;
+    contentEl.innerHTML = currentHtml;
+    container.scrollTop = container.scrollHeight;
+
+    if (char === '.' || char === '?' || char === '!') delay = 150;
+    else if (char === ',') delay = 50;
+
+    setTimeout(typeNext, delay);
+  }
+
+  typeNext();
 }
 
 function showTypingIndicator(container) {

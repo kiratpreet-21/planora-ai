@@ -330,6 +330,14 @@ function getChatResponse(userMessage) {
   const msg = userMessage.toLowerCase().trim();
 
   // Intent detection (order matters — more specific first)
+  if (msg.match(/\b(start timer|start time|quick timer|start session)\b/i)) {
+    return {
+      text: `<p><i data-lucide="play" class="icon-inline"></i> <strong>Starting Quick Timer...</strong></p>`,
+      type: 'action',
+      action: 'startTimer',
+      suggestions: ['Get study tips', 'Analyze my progress']
+    };
+  }
   if (msg.match(/\b(explain|what is|what's|tell me about|how does|how do|define|meaning of)\b/i)) {
     return handleExplainIntent(userMessage);
   }
@@ -339,7 +347,7 @@ function getChatResponse(userMessage) {
   if (msg.match(/\b(quiz|test me|question|practice|solve|challenge|flashcard)\b/i)) {
     return handleQuizIntent(userMessage);
   }
-  if (msg.match(/\b(pomodoro|timer|break|focus session|start session|study session)\b/i)) {
+  if (msg.match(/\b(pomodoro|timer|break|focus session|study session)\b/i)) {
     return handlePomodoroIntent();
   }
   if (msg.match(/\b(suggest|recommend|what should|help me|advice|tip|tips)\b/i)) {

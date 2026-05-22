@@ -369,6 +369,56 @@
     </div>
   </div>
 
+  <!-- FLOATING FOCUS MUSIC WIDGET -->
+  <div class="music-widget" id="musicWidget">
+    <div class="music-header" onclick="toggleMusicWidget()">
+      <div class="music-status">
+        <span class="music-icon"><i data-lucide="headphones" class="icon-inline"></i></span>
+        <div>
+          <div class="music-title" id="musicTitle">Focus Music</div>
+          <div class="music-subtitle" id="musicSubtitle">Not Playing</div>
+        </div>
+      </div>
+      <div class="music-header-actions" onclick="event.stopPropagation()">
+        <button class="music-action-btn" onclick="toggleMusicWidget(event)" title="Minimize">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <div class="music-body" id="musicBody">
+      <div class="music-select-wrapper">
+        <select id="musicTrackSelect" class="music-select" onchange="changeMusicTrack()">
+          <option value="lTRiuFIWV54">Lo-Fi Hip Hop (1 AM Study)</option>
+          <option value="4xDzrJKXOOY">Synthwave / Chillwave</option>
+          <option value="nDq6TstdEi8">Ambient Rain & Piano</option>
+          <option value="7NOSDKb0HlU">Deep Focus / White Noise</option>
+        </select>
+      </div>
+      
+      <div class="music-controls">
+        <button class="music-control-btn" id="musicPlayBtn" onclick="toggleMusicPlay()">
+          <i data-lucide="play" class="icon-inline"></i>
+        </button>
+        
+        <div class="music-volume-wrapper">
+          <i data-lucide="volume-2" class="icon-inline volume-icon"></i>
+          <input type="range" id="musicVolume" class="music-volume-slider" min="0" max="100" value="50" oninput="changeMusicVolume(this.value)">
+        </div>
+      </div>
+      
+      <!-- Hidden YouTube Iframe Container -->
+      <div id="youtubePlayer" style="position: absolute; opacity: 0; pointer-events: none; width: 10px; height: 10px; overflow: hidden; z-index: -1;"></div>
+    </div>
+  </div>
+
+  <!-- Music Widget Toggle Button (when minimized) -->
+  <button class="music-fab" id="musicFab" onclick="toggleMusicWidget()" title="Open Focus Music" style="display: none;">
+    <span class="music-fab-icon"><i data-lucide="music" class="icon-inline"></i></span>
+  </button>
+
   <!-- FLOATING AI CHAT WIDGET -->
   <div class="ai-chat-widget" id="aiChatWidget">
     <div class="ai-chat-header" onclick="toggleChatWidget()">
@@ -525,6 +575,8 @@
 
   <!-- ApexCharts Library -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
 
   <script src="js/auth.js"></script>
   <script src="js/storage.js"></script>
@@ -534,6 +586,7 @@
   <script src="js/calendar.js"></script>
   <script src="js/timer.js"></script>
   <script src="js/features.js"></script>
+  <script src="js/music.js"></script>
   <script src="js/dashboard.js"></script>
   <script src="js/wheel.js"></script>
   <script src="js/depth.js"></script>
